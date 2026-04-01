@@ -1,0 +1,286 @@
+# Azure Employee API
+
+A beginner-friendly **Java 21 + Spring Boot** REST API that you can deploy to **Azure App Service** on a low-cost or free Azure setup.
+
+## What this app does
+
+This app exposes **4 public JSON REST endpoints** for simple employee CRUD operations.
+
+### Employee fields
+- `firstName` (String)
+- `lastName` (String)
+- `department` (String)
+
+### Important note about storage
+This project uses **in-memory storage only**.
+That means:
+- data is stored only while the app is running
+- if the app restarts, scales out, or is redeployed, the data is lost
+- this is okay for learning and demo purposes
+
+---
+
+## Tech stack
+- Java 21
+- Spring Boot 4.0.5
+- Maven
+- Azure App Service
+
+---
+
+## REST endpoints
+
+Base URL locally:
+```bash
+http://localhost:8080
+```
+
+Base URL on Azure:
+```bash
+https://<your-app-name>.azurewebsites.net
+```
+
+### 1. Create employee
+**POST** `/api/employees`
+
+Request:
+```json
+{
+  "firstName": "Aditya",
+  "lastName": "Vadlamudi",
+  "department": "Engineering"
+}
+```
+
+Response:
+```json
+{
+  "id": "generated-id",
+  "firstName": "Aditya",
+  "lastName": "Vadlamudi",
+  "department": "Engineering"
+}
+```
+
+### 2. Get all employees
+**GET** `/api/employees`
+
+Response:
+```json
+[
+  {
+    "id": "generated-id",
+    "firstName": "Aditya",
+    "lastName": "Vadlamudi",
+    "department": "Engineering"
+  }
+]
+```
+
+### 3. Update employee
+**PUT** `/api/employees/{id}`
+
+Request:
+```json
+{
+  "firstName": "Aditya",
+  "lastName": "Vadlamudi",
+  "department": "Cloud"
+}
+```
+
+### 4. Delete employee
+**DELETE** `/api/employees/{id}`
+
+Response:
+```json
+{
+  "message": "Employee deleted successfully",
+  "id": "generated-id"
+}
+```
+
+---
+
+## Run locally
+
+### Prerequisites
+- Java 21 installed
+- Maven installed
+
+### Start the app
+```bash
+mvn spring-boot:run
+```
+
+### Build the jar
+```bash
+mvn clean package
+```
+
+The generated jar will be in:
+```bash
+target/azure-employee-api-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+## Simple deployment to Azure App Service (no CI/CD)
+
+This is the easiest beginner path using the **Azure Web App Maven plugin** and Microsoft Learn guidance.
+
+### Prerequisites
+1. Install Java 21
+2. Install Maven
+3. Install Azure CLI
+4. Create an Azure account / free account
+5. Login to Azure:
+```bash
+az login
+```
+
+---
+
+## Option A: Deploy using Maven plugin
+
+### 1. Build the app
+```bash
+mvn clean package
+```
+
+### 2. Deploy to Azure App Service
+Pick your own globally unique app name.
+
+```bash
+mvn azure-webapp:deploy \
+  -Dazure.resourceGroup=rg-employee-api \
+  -Dazure.appName=employee-api-demo-12345 \
+  -Dazure.region=westeurope \
+  -Dazure.pricingTier=F1
+```
+
+### Notes
+- `F1` is the Free tier where available.
+- If the region or plan combination is not available, Azure may require another supported region or a different plan.
+- Keep your app name unique across Azure.
+
+After deployment, your app should be available at:
+```bash
+https://employee-api-demo-12345.azurewebsites.net/api/employees
+```
+
+---
+
+## Option B: Deploy from the Azure Portal manually
+
+If you prefer the portal:
+
+1. Build the jar:
+```bash
+mvn clean package
+```
+2. In Azure Portal, create an **App Service** web app.
+3. Choose:
+   - Publish: **Code**
+   - Runtime stack: **Java 21**
+   - Java web server stack: **Java SE**
+   - Pricing plan: **Free F1** if available
+4. After the App Service is created, deploy your JAR using the App Service deployment options described in Microsoft Learn.
+
+The Maven plugin path is usually simpler for beginners.
+
+---
+
+## Recommended Azure settings for this learning app
+
+For a low-cost beginner deployment:
+- App Service Plan: **Free F1** if available
+- Runtime: **Java 21**
+- Web container: **Java SE**
+- Region: use a region close to you and supported by your subscription
+
+---
+
+## Security tips for beginners on Azure App Service
+
+Even for a simple learning app, do these:
+
+### 1. Do not hardcode secrets
+This sample has no database and no secrets.
+Later, if you add passwords or keys, do **not** place them in source code.
+Use **App Settings** or **Azure Key Vault**.
+
+### 2. Validate input
+This project already validates JSON fields using Spring validation.
+
+### 3. Do not expose management endpoints broadly
+This project exposes only `health` and `info` actuator endpoints.
+Avoid exposing everything.
+
+### 4. Use HTTPS only
+Azure App Service supports HTTPS. In production, always enforce HTTPS redirection in Azure.
+
+### 5. Keep dependencies updated
+Use supported Java and Spring Boot versions and update them regularly.
+
+### 6. Remember that in-memory data is not persistent
+Anyone can call the public API, and all data is temporary. Do not use this design for real business data.
+
+### 7. Add authentication before real use
+This sample intentionally has no authentication so you can learn REST basics.
+For a real public API, add authentication and authorization.
+
+---
+
+## Suggested test commands
+
+### Create
+```bash
+curl -X POST http://localhost:8080/api/employees \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName":"Aditya",
+    "lastName":"Vadlamudi",
+    "department":"Engineering"
+  }'
+```
+
+### Get all
+```bash
+curl http://localhost:8080/api/employees
+```
+
+### Update
+```bash
+curl -X PUT http://localhost:8080/api/employees/<id> \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName":"Aditya",
+    "lastName":"Vadlamudi",
+    "department":"Cloud"
+  }'
+```
+
+### Delete
+```bash
+curl -X DELETE http://localhost:8080/api/employees/<id>
+```
+
+---
+
+## Helpful official references
+- Azure App Service Java quickstart
+- Azure App Service Java deployment and runtime docs
+- Azure App Service hosting plans and pricing tiers
+
+---
+
+## Final beginner advice
+Start simple:
+1. Run locally
+2. Build the jar
+3. Deploy once with Maven plugin
+4. Test the public URL
+5. Later, add database, auth, and better security
+
+That path is much easier than learning everything at once.
