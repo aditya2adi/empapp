@@ -46,8 +46,8 @@ https://<your-app-name>.azurewebsites.net
 Request:
 ```json
 {
-  "firstName": "Aditya",
-  "lastName": "Vadlamudi",
+  "firstName": "Max",
+  "lastName": "Mueller",
   "department": "Engineering"
 }
 ```
@@ -56,8 +56,8 @@ Response:
 ```json
 {
   "id": "generated-id",
-  "firstName": "Aditya",
-  "lastName": "Vadlamudi",
+  "firstName": "Max",
+  "lastName": "Vuller",
   "department": "Engineering"
 }
 ```
@@ -70,8 +70,8 @@ Response:
 [
   {
     "id": "generated-id",
-    "firstName": "Aditya",
-    "lastName": "Vadlamudi",
+    "firstName": "Max",
+    "lastName": "Muller",
     "department": "Engineering"
   }
 ]
@@ -83,8 +83,8 @@ Response:
 Request:
 ```json
 {
-  "firstName": "Aditya",
-  "lastName": "Vadlamudi",
+  "firstName": "Max",
+  "lastName": "Muller",
   "department": "Cloud"
 }
 ```
@@ -239,8 +239,8 @@ For a real public API, add authentication and authorization.
 curl -X POST http://localhost:8080/api/employees \
   -H "Content-Type: application/json" \
   -d '{
-    "firstName":"Aditya",
-    "lastName":"Vadlamudi",
+    "firstName":"Max",
+    "lastName":"Muller",
     "department":"Engineering"
   }'
 ```
@@ -255,8 +255,8 @@ curl http://localhost:8080/api/employees
 curl -X PUT http://localhost:8080/api/employees/<id> \
   -H "Content-Type: application/json" \
   -d '{
-    "firstName":"Aditya",
-    "lastName":"Vadlamudi",
+    "firstName":"Max",
+    "lastName":"Muller",
     "department":"Cloud"
   }'
 ```
