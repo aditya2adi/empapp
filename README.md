@@ -179,13 +179,239 @@ If you prefer the portal:
 ```bash
 mvn clean package
 ```
-2. In Azure Portal, create an **App Service** web app.
-3. Choose:
-   - Publish: **Code**
-   - Runtime stack: **Java 21**
-   - Java web server stack: **Java SE**
-   - Pricing plan: **Free F1** if available
-4. After the App Service is created, deploy your JAR using the App Service deployment options described in Microsoft Learn.
+## 🚀 Deploy Spring Boot Java App to Azure App Service (Linux)
+
+### ✅ Prerequisites
+
+*   Java **21**
+*   Maven
+*   Spring Boot application (executable / fat JAR)
+*   Azure subscription
+
+***
+
+### 1️⃣ Build the Application
+
+```bash
+mvn clean package
+```
+
+✅ Ensure the JAR runs locally:
+
+```bash
+java -jar target/your-app.jar
+```
+
+***
+
+### 2️⃣ Configure the Application Port
+
+Azure provides a dynamic port via the `PORT` environment variable.
+
+Add this to `application.properties`:
+
+```properties
+server.port=${PORT:8080}
+```
+
+***
+
+### 3️⃣ Create Azure App Service
+
+In **Azure Portal**:
+
+1.  Create **App Service**
+2.  Choose:
+    *   **OS**: Linux ✅
+    *   **Stack**: Java
+    *   **Java version**: 21
+    *   **Java web server**: Java SE
+3.  Create the App Service
+
+***
+
+### 4️⃣ Deploy the JAR (ZIP Deploy)
+
+1.  Create a ZIP file:
+        app.zip
+        └── your-app.jar
+2.  Go to:
+    *   **App Service → Deployment Center**
+    *   Choose **ZIP Deploy**
+    *   Upload `app.zip`
+
+***
+
+### 5️⃣ Configure Startup Command
+
+Go to:
+**App Service → Configuration → General settings**
+
+Set **Startup Command**:
+
+```bash
+java -jar your-app.jar
+```
+
+✅ Save and **Restart** the App Service.
+
+***
+
+### 6️⃣ Verify Application Startup
+
+Go to:
+**App Service → Log stream**
+
+✅ Successful startup looks like:
+
+*   Spring Boot banner
+*   `Tomcat started on port XXXX`
+*   `Started <ApplicationName>`
+
+***
+
+### 7️⃣ Access the Application
+
+Base URL:
+
+    https://<app-name>.azurewebsites.net
+
+Health check example:
+
+    /actuator/health
+
+API example:
+
+    /api/health
+
+***
+
+## ✅ Common Troubleshooting
+
+| Issue                    | Fix                              |
+| ------------------------ | -------------------------------- |
+| 503 Service Unavailable  | Check `server.port=${PORT:8080}` |
+| App not starting         | Verify Startup Command           |
+| No logs                  | Check Log Stream                 |
+| Works locally, not Azure | Java version mismatch            |
+
+## 🚀 Deploy Spring Boot Java App to Azure App Service (Linux)
+
+### ✅ Prerequisites
+
+*   Java **21**
+*   Maven
+*   Spring Boot application (executable / fat JAR)
+*   Azure subscription
+
+***
+
+### 1️⃣ Build the Application
+
+```bash
+mvn clean package
+```
+
+✅ Ensure the JAR runs locally:
+
+```bash
+java -jar target/your-app.jar
+```
+
+***
+
+### 2️⃣ Configure the Application Port
+
+Azure provides a dynamic port via the `PORT` environment variable.
+
+Add this to `application.properties`:
+
+```properties
+server.port=${PORT:8080}
+```
+
+***
+
+### 3️⃣ Create Azure App Service
+
+In **Azure Portal**:
+
+1.  Create **App Service**
+2.  Choose:
+    *   **OS**: Linux ✅
+    *   **Stack**: Java
+    *   **Java version**: 21
+    *   **Java web server**: Java SE
+3.  Create the App Service
+
+***
+
+### 4️⃣ Deploy the JAR (ZIP Deploy)
+
+1.  Create a ZIP file:
+        app.zip
+        └── your-app.jar
+2.  Go to:
+    *   **App Service → Deployment Center**
+    *   Choose **ZIP Deploy**
+    *   Upload `app.zip`
+
+***
+
+### 5️⃣ Configure Startup Command
+
+Go to:
+**App Service → Configuration → General settings**
+
+Set **Startup Command**:
+
+```bash
+java -jar your-app.jar
+```
+
+✅ Save and **Restart** the App Service.
+
+***
+
+### 6️⃣ Verify Application Startup
+
+Go to:
+**App Service → Log stream**
+
+✅ Successful startup looks like:
+
+*   Spring Boot banner
+*   `Tomcat started on port XXXX`
+*   `Started <ApplicationName>`
+
+***
+
+### 7️⃣ Access the Application
+
+Base URL:
+
+    https://<app-name>.azurewebsites.net
+
+Health check example:
+
+    /actuator/health
+
+API example:
+
+    /api/health
+
+***
+
+## ✅ Common Troubleshooting
+
+| Issue                    | Fix                              |
+| ------------------------ | -------------------------------- |
+| 503 Service Unavailable  | Check `server.port=${PORT:8080}` |
+| App not starting         | Verify Startup Command           |
+| No logs                  | Check Log Stream                 |
+| Works locally, not Azure | Java version mismatch            |
+
+
 
 The Maven plugin path is usually simpler for beginners.
 
